@@ -5,9 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -145,6 +143,21 @@ public class CarControllerTest {
                 .andExpect(status().isNoContent());
 
         Mockito.verify(this.carService, times(1)).delete(1L);
+    }
+
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         * TODO: Check whether a vehicle is updated when the put() method is called from the Car Controller.This
+         *   should utilize the car from `getCar()` below.
+         */
+        Car car = getCar(); // initialize a car with updated data
+        this.mvc.perform(
+                        put(new URI("/cars/1")) // do PUT request to /cars/{id}
+                                .content(json.write(car).getJson()) // use JSON for request body
+                                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 
     /**
